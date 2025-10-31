@@ -44,6 +44,21 @@ print(world_data["High Income Economy"].value_counts())
 print(pd.crosstab(world_data["Region"], world_data["High Income Economy"]))
 #There are 0 high income economies in Africa, 17 in Americas, 14 in Asia, 31 in Europe, and 4 in Oceania. This answer lines up with the previous question of how many High income countries there are (17+14+31+4 = 67)
 
+#Question 9
+women_80 = 0
+
+for x in world_data["Life expectancy, female"]:
+    if x > 80:
+        women_80 += 1
+    else:
+        continue
+print(women_80)
+
+countries_80 = world_data[world_data["Life expectancy, female"] > 80]
+
+for y in countries_80["Country Name"]:
+    print(y,", ", end = '')
+#There are 66 countries where female life expectancy is greater than 80. Those countries are: Albania , Australia , Austria , Barbados , Belgium , Bermuda , Canada , Cayman Islands , Channel Islands , Chile , Colombia , Costa Rica , Croatia , Cuba , Curacao , Cyprus , Czech Republic , Denmark , Estonia , Faroe Islands , Finland , France , Germany , Greece , Guam , Hong Kong SAR, China , Iceland , Ireland , Isle of Man , Israel , Italy , Japan , Korea, Rep. , Lebanon , Liechtenstein , Lithuania , Luxembourg , Macao SAR, China , Maldives , Malta , Netherlands , New Caledonia , New Zealand , Norway , Oman , Panama , Poland , Portugal , Puerto Rico , Qatar , San Marino , Singapore , Sint Maarten (Dutch part) , Slovak Republic , Slovenia , Spain , Sri Lanka , St. Martin (French part) , Sweden , Switzerland , Thailand , Turkey , United Kingdom , United States , Uruguay , Virgin Islands (U.S.)
 
 
 # Part 4
@@ -82,19 +97,38 @@ sns.relplot(data = world_data, x ="Life expectancy, male", y = "Physicians", col
    #2-Is there a correlation between tertiary education (education after high school) and life expectancy? Does more education lead to a higher life expectancy? Do these values differ between genders? Across regions?
 sns.relplot(data = world_data, x ="Tertiary education, female", y = "Life expectancy, female", col = "Region", hue = "Region")
 sns.relplot(data = world_data, x ="Tertiary education, male", y = "Life expectancy, male", col = "Region", hue = "Region")
-    #Interpretation:
  
 
    #3-Is there a correlation between population and life expectancy? Do countries with smaller populations have higher life expectancies?
+sns.relplot(data = world_data, x ="Life expectancy, female", y = "Population", col = "Region")
+sns.relplot(data = world_data, x ="Life expectancy, male", y = "Population", col = "Region")
    
    
-   #Interpretation:
+   #4-Is there a relationship between tourism and life expectancy? Do regions with more tourists have a high income economy and therefore a higher life expectancy?
+sns.relplot(data = world_data, x ="Life expectancy, female", y = "International tourism", col = "Region", hue = "High Income Economy")
+sns.relplot(data = world_data, x ="Life expectancy, male", y = "International tourism", col = "Region", hue = "High Income Economy")
    
-   
-   #4-Is there a relationship between tourism and life expectancy? Do regions with more tourists have less life expectancy rates?
- 
-   #Interpretation:
-   
-   #5- 
-   
-   #Interpretation:
+   #5- Do higher greenhouse gas emissions mean lower life expectancies? Do wealthier countries produce more greenhouse gases?
+sns.relplot(data = world_data, x ="Life expectancy, female", y = "International tourism", col = "Region", hue = "High Income Economy", style = "High Income Economy")
+sns.relplot(data = world_data, x ="Life expectancy, male", y = "International tourism", col = "Region", hue = "High Income Economy", style = "High Income Economy")
+
+
+#Question 6
+import pandas as pd
+world_data = pd.read_csv("worlddata.csv")
+import seaborn as sns
+
+world_data["Emissions per capita"] = world_data["Greenhouse gas emissions"] / world_data["Population"]
+gases_per_cap = world_data["Emissions per capita"]
+
+#a
+sns.relplot(data = world_data, y = "Emissions per capita", x = "Internet use")
+
+#b
+emissions_greater = world_data[world_data["Emissions per capita"] > 0.03]
+
+for y in emissions_greater["Country Name"]:
+    print(y,", ", end = '')
+    
+#c,d
+sns.relplot(data = world_data, y = "Emissions per capita", x = "Internet use", col = "Region", hue = "High Income Economy", style = "High Income Economy")
